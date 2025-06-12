@@ -1,0 +1,108 @@
+/* Rose Pine Color Scheme */
+@define-color base            #191724;
+@define-color surface         #1f1d2e;
+@define-color overlay         #26233a;
+@define-color muted           #6e6a86;
+@define-color subtle          #908caa;
+@define-color text            #e0def4;
+@define-color love            #eb6f92;
+@define-color gold            #f6c177;
+@define-color rose            #ebbcba;
+@define-color pine            #31748f;
+@define-color foam            #9ccfd8;
+@define-color iris            #c4a7e7;
+@define-color highlightLow    #21202e;
+@define-color highlightMed    #403d52;
+@define-color highlightHigh   #524f67;
+
+/* Global Waybar styling */
+window#waybar {
+    background-color: @base;
+    color: @text;
+    font-family: "Fira Code", "JetBrains Mono", monospace;
+    font-size: 12px;
+    border-bottom: 1px solid @overlay;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Module styling (applies to all modules) */
+#workspaces,
+#cpu,
+#memory,
+#pulseaudio,
+#clock,
+#backlight,
+#network,
+#battery,
+#custom-power {
+    color: @text;
+    background-color: @surface;
+    padding: 0 8px;
+    border-radius: 4px;
+    margin: 0 2px;
+}
+
+/* Date styling */
+#clock.date {
+    color: @text;
+    background-color: @surface;
+    padding: 0 8px;
+    border-radius: 4px;
+}
+
+/* Active workspace highlight */
+#workspaces button.active {
+    color: @pine;
+    font-weight: bold;
+}
+
+/* Urgent workspace (blinking) */
+#workspaces button.urgent {
+    color: @love;
+    animation: blink 1s infinite;
+}
+
+/* Volume muted state */
+#pulseaudio.muted {
+    color: @muted;
+}
+
+/* Brightness module */
+#backlight {
+    color: @gold;
+    background-color: @surface;
+}
+
+/* Network module states */
+#network {
+    color: @foam;
+    background-color: @surface;
+}
+
+#network.disconnected {
+    color: @muted;
+}
+
+#network.ethernet {
+    color: @pine;
+}
+
+
+/* Power button - highlighted in red */
+#custom-power {
+    color: @love;
+    background-color: @surface;
+    font-weight: bold;
+}
+
+#custom-power:hover {
+    background-color: @overlay;
+    color: @rose;
+}
+
+/* Animations */
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
