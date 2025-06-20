@@ -69,6 +69,8 @@ lspconfig.sqlls.setup{}
 lspconfig.lemminx.setup{}
 lspconfig.omnisharp.setup{}
 lspconfig.intelephense.setup{}
+lspconfig.html.setup{}
+lspconfig.cssls.setup{}
 
 lspconfig.arduino_language_server.setup({
   cmd = {
@@ -77,7 +79,7 @@ lspconfig.arduino_language_server.setup({
     "-fqbn", "arduino:avr:uno",
     "-clangd", "clangd",
   },
-  filetypes = { "ino"},  
+  filetypes = { "ino"},
 })
 
 lspconfig.angularls.setup({
