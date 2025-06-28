@@ -19,7 +19,7 @@
 window#waybar {
     background-color: @base;
     color: @text;
-    font-family: "Fira Code", "JetBrains Mono", monospace;
+    font-family: "CaskaydiaCove Nerd Font", "JetBrains Mono", monospace;
     font-size: 12px;
     border-bottom: 1px solid @overlay;
     background-color: rgba(0, 0, 0, 0.4);
