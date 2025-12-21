@@ -55,22 +55,45 @@ cmp.setup({
 vim.filetype.add({
   extension = {
     fxml = "xml",
-    axaml = "xml"
+    axaml = "xml",
   }
 })
 
 local lspconfig = require('lspconfig')
 local util = require('lspconfig.util')
 
-lspconfig.clangd.setup{}
+
+lspconfig.texlab.setup{}
+lspconfig.marksman.setup{}
 lspconfig.lua_ls.setup{}
-lspconfig.pyright.setup{}
+lspconfig.pyright.setup({
+  settings = {
+    python = {
+      analysis = {
+        typeCheckingMode = "off",  -- Options: "off", "basic", "strict"
+        autoSearchPaths = true,
+        useLibraryCodeForTypes = true,
+      },
+    },
+  },
+})
 lspconfig.sqlls.setup{}
 lspconfig.lemminx.setup{}
 lspconfig.omnisharp.setup{}
 lspconfig.intelephense.setup{}
 lspconfig.html.setup{}
 lspconfig.cssls.setup{}
+lspconfig.rust_analyzer.setup{}
+lspconfig.gopls.setup{}
+lspconfig.clangd.setup{
+  filetypes = { "c", "cpp", "hpp", "h" },
+  cmd = {
+    "clangd",
+    "--background-index",
+    "--header-insertion=never",
+    "--completion-style=detailed",
+  },
+}
 
 lspconfig.arduino_language_server.setup({
   cmd = {
@@ -95,3 +118,5 @@ lspconfig.vtsls.setup({
     return util.root_pattern("tsconfig.json", "package.json", ".git")(fname)
   end,
 })
+
+
