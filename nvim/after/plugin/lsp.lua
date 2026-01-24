@@ -86,11 +86,18 @@ lspconfig.cssls.setup{}
 lspconfig.rust_analyzer.setup{}
 lspconfig.gopls.setup{}
 lspconfig.clangd.setup{
+<<<<<<< HEAD
   filetypes = { "c", "cpp", "hpp", "h" },
   cmd = {
     "clangd",
     "--background-index",
     "--header-insertion=never",
+=======
+  filetypes = { "c", "cpp", "cu", "hpp", "h" },
+  cmd = {
+    "clangd",
+    "--background-index",
+>>>>>>> ae8f47a (stable)
     "--completion-style=detailed",
   },
 }

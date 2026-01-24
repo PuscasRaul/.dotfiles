@@ -41,9 +41,15 @@ local plugins = {
   },
   {
     'nvim-treesitter/nvim-treesitter',
+<<<<<<< HEAD
     build = ':TSUpdate',
   },
   'nvim-treesitter/playground',
+=======
+    commit = '30de5e7',
+    build = ':TSUpdate',
+  },
+>>>>>>> ae8f47a (stable)
   'ThePrimeagen/harpoon',
   'mbbill/undotree',
   'tpope/vim-fugitive',
@@ -111,3 +117,18 @@ local plugins = {
   },
 }
 require("lazy").setup(plugins)
+<<<<<<< HEAD
+=======
+
+require'nvim-treesitter'.setup {
+   ensure_installed = {
+     "javascript", "python", "html", "css", "twig", "c", "cuda"
+ },
+    highlight = {
+        enable = true, -- Enable syntax highlighting
+    },
+    indent = {
+        enable = true, -- Enable smart indentation
+    },
+}
+>>>>>>> ae8f47a (stable)
