@@ -42,6 +42,7 @@
 - [[#sudo-edit][SUDO-EDIT]]
 - [[#pyenv][PYENV]]
 - [[#language-support][LANGUAGE-SUPPORT]]
+- [[#disable-auto-save][DISABLE AUTO-SAVE]]
 
 * RELOAD-EMACS
 #+begin_src emacs-lisp
@@ -145,94 +146,100 @@
 
 ** General Keybindings
 #+begin_src emacs-lisp
-    (use-package general
-      :ensure t
-      :config
-      (general-evil-setup)
+  (defun rp/flycheck-errors ()
+    (interactive)
+    (if (get-buffer-window "*Flycheck errors*")
+        (delete-window (get-buffer-window "*Flycheck errors*"))
+      (flycheck-list-errors))) 
 
-      (general-define-key
-       :states '(normal visual emacs)
-       "K" 'lsp-ui-doc-glance
-       "gd" 'lsp-find-defintion)
+  (use-package general
+    :ensure t
+    :config
+    (general-evil-setup)
 
-      ;; SET SPC as leader key
-      (general-create-definer rp/leader-keys
-        :states '(normal insert visual emacs)
-        :keymaps 'override
-        :prefix "SPC" ;; set leader
-        :global-prefix "M-SPC") ;; access leader in insert mode
+    (general-define-key
+     :states '(normal visual emacs)
+     "K" 'lsp-ui-doc-glance
+     "gd" 'lsp-ui-peek-find-definitions)
 
-      (rp/leader-keys
-        "b" '(:ignore t :wk "buffer")
-        "bi" '(ibuffer :wk "ibuffer")
-        "bb" '(switch-to-buffer :wk "Switch buffer")
-        "bk" '(kill-current-buffer :wk "Kill this buffer")
-        "bn" '(next-buffer :wk "Next buffer")
-        "bp" '(previous-buffer :wk "Previous buffer")
-        "br" '(revert-buffer :wk "Reload buffer"))
+    ;; SET SPC as leader key
+    (general-create-definer rp/leader-keys
+      :states '(normal insert visual emacs)
+      :keymaps 'override
+      :prefix "SPC" ;; set leader
+      :global-prefix "M-SPC") ;; access leader in insert mode
 
-      (rp/leader-keys
-        "e" '(:ignore t :wk "Evaluate")
-        "eb" '(eval-buffer :wk "Evaluate elisp in buffer")
-        "ed" '(eval-defun :wk "Evaluate defun containing or after point")
-        "ee" '(eval-expression :wk "Evaluate elisp expression")
-        "el" '(eval-last-sexp :wk "Evaluate elisp expression before point")
-        "er" '(eval-region :wk "Evaluate elisp region"))
+    (rp/leader-keys
+      "b" '(:ignore t :wk "buffer")
+      "bi" '(ibuffer :wk "ibuffer")
+      "bb" '(switch-to-buffer :wk "Switch buffer")
+      "bk" '(kill-current-buffer :wk "Kill this buffer")
+      "bn" '(next-buffer :wk "Next buffer")
+      "bp" '(previous-buffer :wk "Previous buffer")
+      "br" '(revert-buffer :wk "Reload buffer"))
 
-      (rp/leader-keys
-        "." '(find-file :wk "Find file")
-        "fc" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
-        "fr" '(counsel-recentf :wk "Find recent files")
-        "TAB TAB" '(comment-line :wk "Comment lines"))
+    (rp/leader-keys
+      "e" '(:ignore t :wk "Evaluate")
+      "eb" '(eval-buffer :wk "Evaluate elisp in buffer")
+      "ed" '(eval-defun :wk "Evaluate defun containing or after point")
+      "ee" '(eval-expression :wk "Evaluate elisp expression")
+      "el" '(eval-last-sexp :wk "Evaluate elisp expression before point")
+      "er" '(eval-region :wk "Evaluate elisp region"))
 
-      (rp/leader-keys
-        "h" '(:ignore t :wk "Help")
-        "hf" '(describe-function :wk "Describe function")
-        "hv" '(describe-variable :wk "Describe variable")
-        "hrr" '(reload-init-file :wk "Reload emacs config"))
+    (rp/leader-keys
+      "." '(find-file :wk "Find file")
+      "fc" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
+      "fr" '(counsel-recentf :wk "Find recent files")
+      "TAB TAB" '(comment-line :wk "Comment lines"))
 
-      (rp/leader-keys
-        "d" '(:ignore t :wk "Dired")
-        "dd" '(dired :wk "Open dired")
-        "dj" '(dired-jump :wk "Dired jump to current")
-        "dn" '(neotree-dir :wk "Open directory in neotree")
-        "dp" '(peep-dired :wk "Peep-dired"))
+    (rp/leader-keys
+      "h" '(:ignore t :wk "Help")
+      "hf" '(describe-function :wk "Describe function")
+      "hv" '(describe-variable :wk "Describe variable")
+      "hrr" '(reload-init-file :wk "Reload emacs config"))
 
-      (rp/leader-keys
-        "m b" '(:ignore t :wk "Tables")
-        "m b -" '(org-table-insert-hline :wk "Insert hline in table"))
+    (rp/leader-keys
+      "d" '(:ignore t :wk "Dired")
+      "dd" '(dired :wk "Open dired")
+      "dj" '(dired-jump :wk "Dired jump to current")
+      "dn" '(neotree-dir :wk "Open directory in neotree")
+      "dp" '(peep-dired :wk "Peep-dired"))
 
-      (rp/leader-keys
-        "p" '(projectile-command-map :wk "Projectile"))
+    (rp/leader-keys
+      "m b" '(:ignore t :wk "Tables")
+      "m b -" '(org-table-insert-hline :wk "Insert hline in table"))
 
-      (rp/leader-keys
-        "t" '(:ignore t :wk "Toggle")
-        "te" '(eshell-toggle :wk "Toggle eshell")
-        "tf" '(lsp-ui-flycheck-list :wk "Toggle errors buffer")
-        "tv" '(vterm-toggle :wk "Vterm toggle")
-        "tn" '(neotree-toggle :wk "Toggle neotree file viewer")
-        "tl" '(display-line-numbers-mode :wk "Toggle line numbers")
-        "tt" '(visual-line-mode :wk "Toggle truncated lines"))
-      
-      (rp/leader-keys
-        "w" '(:ignore t :wk "Windows")
-        "wc" '(evil-window-delete :wk "Close window")
-        "wn" '(evil-window-new :wk "New window")
-        "ws" '(evil-window-split :wk "Horizontal split window")
-        "wv" '(evil-window-vsplit :wk "Vertical split window")
-        ;; Window motions
-        "wh" '(evil-window-left :wk "Window left")
-        "wj" '(evil-window-down :wk "Window down")
-        "wl" '(evil-window-right :wk "Window right")
-        "wk" '(evil-window-up :wk "Window up")
+    (rp/leader-keys
+      "p" '(projectile-command-map :wk "Projectile"))
 
-        ;; Move windows
-        "wH" '(buf-move-left :wk "Move window left")
-        "wJ" '(buf-move-down :wk "Move window down")
-        "wL" '(buf-move-right :wk "Move window right")
-        "wK" '(buf-move-up :wk "Move window up"))
-      
-      ) 
+    (rp/leader-keys
+      "t" '(:ignore t :wk "Toggle")
+      "te" '(eshell-toggle :wk "Toggle eshell")
+      "tf" '(rp/flycheck-errors :wk "List errors")
+      "tv" '(vterm-toggle :wk "Vterm toggle")
+      "tn" '(neotree-toggle :wk "Toggle neotree file viewer")
+      "tl" '(display-line-numbers-mode :wk "Toggle line numbers")
+      "tt" '(visual-line-mode :wk "Toggle truncated lines"))
+    
+    (rp/leader-keys
+      "w" '(:ignore t :wk "Windows")
+      "wc" '(evil-window-delete :wk "Close window")
+      "wn" '(evil-window-new :wk "New window")
+      "ws" '(evil-window-split :wk "Horizontal split window")
+      "wv" '(evil-window-vsplit :wk "Vertical split window")
+      ;; Window motions
+      "wh" '(evil-window-left :wk "Window left")
+      "wj" '(evil-window-down :wk "Window down")
+      "wl" '(evil-window-right :wk "Window right")
+      "wk" '(evil-window-up :wk "Window up")
+
+      ;; Move windows
+      "wH" '(buf-move-left :wk "Move window left")
+      "wJ" '(buf-move-down :wk "Move window down")
+      "wL" '(buf-move-right :wk "Move window right")
+      "wK" '(buf-move-up :wk "Move window up"))
+    
+    ) 
 
 #+end_src
 
@@ -326,7 +333,6 @@
     :config
     (setq lsp-pylsp-server-command '("pylsp")))
 
-
   (use-package lsp-ui
     :ensure t
     :hook (lsp-mode . lsp-ui-mode)
@@ -334,9 +340,6 @@
     (setq lsp-ui-doc-position 'bottom)
     :init (lsp-ui-mode t))
 
-  (use-package lsp-treemacs
-    :ensure t
-    :after lsp)
 #+end_src
 
 
@@ -414,7 +417,15 @@
     :ensure t
     :defer t
     :diminish
-    :init (global-flycheck-mode t))
+    :init (global-flycheck-mode t)
+    :config 
+    (add-to-list 'display-buffer-alist
+                 `(,(rx bos "*Flycheck errors*" eos)
+                 (display-buffer-reuse-window
+                  display-buffer-in-side-window)
+                 (side            . bottom)
+                 (reusable-frames . visible)
+                 (window-height   . 0.25))))
 #+end_src
 
 
@@ -678,4 +689,10 @@ Defining various fonts that emacs will use
 
 * LANGUAGE-SUPPORT
 #+begin_src emacs-lisp
+#+end_src>
+
+* DISABLE AUTO-SAVE
+ #+begin_src emacs-lisp
+   (setq make-backup-files nil)     
+   (setq auto-save-default nil)     
 #+end_src>

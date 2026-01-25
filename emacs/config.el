@@ -85,6 +85,12 @@
   :config
   (setq ring-bell-function #'ignore))
 
+(defun rp/flycheck-errors ()
+  (interactive)
+  (if (get-buffer-window "*Flycheck errors*")
+      (delete-window (get-buffer-window "*Flycheck errors*"))
+    (flycheck-list-errors))) 
+
 (use-package general
   :ensure t
   :config
@@ -93,7 +99,7 @@
   (general-define-key
    :states '(normal visual emacs)
    "K" 'lsp-ui-doc-glance
-   "gd" 'lsp-find-defintion)
+   "gd" 'lsp-ui-peek-find-definitions)
 
   ;; SET SPC as leader key
   (general-create-definer rp/leader-keys
@@ -148,7 +154,7 @@
   (rp/leader-keys
     "t" '(:ignore t :wk "Toggle")
     "te" '(eshell-toggle :wk "Toggle eshell")
-    "tf" '(lsp-ui-flycheck-list :wk "Toggle errors buffer")
+    "tf" '(rp/flycheck-errors :wk "List errors")
     "tv" '(vterm-toggle :wk "Vterm toggle")
     "tn" '(neotree-toggle :wk "Toggle neotree file viewer")
     "tl" '(display-line-numbers-mode :wk "Toggle line numbers")
@@ -258,17 +264,12 @@ one, an error is signaled."
   :config
   (setq lsp-pylsp-server-command '("pylsp")))
 
-
 (use-package lsp-ui
   :ensure t
   :hook (lsp-mode . lsp-ui-mode)
   :config 
   (setq lsp-ui-doc-position 'bottom)
   :init (lsp-ui-mode t))
-
-(use-package lsp-treemacs
-  :ensure t
-  :after lsp)
 
 (use-package electric
   :config
@@ -323,7 +324,15 @@ one, an error is signaled."
   :ensure t
   :defer t
   :diminish
-  :init (global-flycheck-mode t))
+  :init (global-flycheck-mode t)
+  :config 
+  (add-to-list 'display-buffer-alist
+               `(,(rx bos "*Flycheck errors*" eos)
+               (display-buffer-reuse-window
+                display-buffer-in-side-window)
+               (side            . bottom)
+               (reusable-frames . visible)
+               (window-height   . 0.25))))
 
 (use-package all-the-icons
   :ensure t
