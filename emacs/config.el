@@ -257,6 +257,8 @@ one, an error is signaled."
   :hook ((python-mode . lsp-deferred)
          (c-mode      . lsp-deferred)
          (c++-mode    . lsp-deferred)
+	 (java-mode . lsp-deferred)
+	 (csharp-mode . lsp-deferred)
          (rust-mode   . lsp-deferred))
   :custom
   ;; This is the magic line for pylsp + virtualenvs
@@ -504,3 +506,26 @@ one, an error is signaled."
   (rp/leader-keys
     "fu" '(sudo-edit-find-file :wk "Sudo find file")
     "fU" '(sudo-edit :wk "Sudo edit file")))
+
+;;; Also have direnv installed through apt
+(use-package envrc
+  :ensure t
+  :hook (after-init . envrc-global-mode))
+
+
+
+;; Minimal fix - just ensure directories exist
+(make-directory "~/.emacs.d/auto-save" t)
+(make-directory "~/.emacs.d/backups" t)
+
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups/")))
+(setq auto-save-file-name-transforms 
+      '((".*" "~/.emacs.d/auto-save/\\1" t)))
+(setq create-lockfiles nil)
+
+
+
+(use-package evil-multiedit
+  :ensure t  
+  :config
+  (evil-multiedit-default-keybinds))

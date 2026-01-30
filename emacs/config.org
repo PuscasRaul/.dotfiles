@@ -42,7 +42,13 @@
 - [[#sudo-edit][SUDO-EDIT]]
 - [[#pyenv][PYENV]]
 - [[#language-support][LANGUAGE-SUPPORT]]
+<<<<<<< HEAD
 - [[#disable-auto-save][DISABLE AUTO-SAVE]]
+=======
+- [[#changing-directory-of-auto-saves][CHANGING DIRECTORY OF AUTO-SAVES]]
+- [[#enabling-maven][ENABLING MAVEN]]
+- [[#multiple-cursors][MULTIPLE CURSORS]]
+>>>>>>> 1928ae2 (huhuhuh)
 
 * RELOAD-EMACS
 #+begin_src emacs-lisp
@@ -152,10 +158,17 @@
         (delete-window (get-buffer-window "*Flycheck errors*"))
       (flycheck-list-errors))) 
 
+<<<<<<< HEAD
   (use-package general
     :ensure t
     :config
     (general-evil-setup)
+=======
+      (general-define-key
+       :states '(normal visual emacs)
+       "K" 'lsp-ui-doc-glance
+       "gd" 'lsp-ui-peek-find-definitions)
+>>>>>>> 1928ae2 (huhuhuh)
 
     (general-define-key
      :states '(normal visual emacs)
@@ -326,6 +339,8 @@
     :hook ((python-mode . lsp-deferred)
            (c-mode      . lsp-deferred)
            (c++-mode    . lsp-deferred)
+  	 (java-mode . lsp-deferred)
+  	 (csharp-mode . lsp-deferred)
            (rust-mode   . lsp-deferred))
     :custom
     ;; This is the magic line for pylsp + virtualenvs
@@ -685,10 +700,11 @@ Defining various fonts that emacs will use
   :ensure t
   :hook (after-init . envrc-global-mode))
 
-#+end_src>
+#+end_src
 
 * LANGUAGE-SUPPORT
 #+begin_src emacs-lisp
+<<<<<<< HEAD
 #+end_src>
 
 * DISABLE AUTO-SAVE
@@ -696,3 +712,30 @@ Defining various fonts that emacs will use
    (setq make-backup-files nil)     
    (setq auto-save-default nil)     
 #+end_src>
+=======
+#+end_src
+
+* CHANGING DIRECTORY OF AUTO-SAVES
+#+begin_src emacs-lisp
+;; Minimal fix - just ensure directories exist
+(make-directory "~/.emacs.d/auto-save" t)
+(make-directory "~/.emacs.d/backups" t)
+
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups/")))
+(setq auto-save-file-name-transforms 
+      '((".*" "~/.emacs.d/auto-save/\\1" t)))
+(setq create-lockfiles nil)
+#+end_src
+
+* ENABLING MAVEN
+#+begin_src emacs-lisp
+#+end_src
+
+* MULTIPLE CURSORS
+#+begin_src emacs-lisp
+(use-package evil-multiedit
+  :ensure t  
+  :config
+  (evil-multiedit-default-keybinds))
+#+end_src
+>>>>>>> 1928ae2 (huhuhuh)
