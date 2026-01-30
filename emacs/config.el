@@ -95,6 +95,10 @@
   :ensure t
   :config
   (general-evil-setup)
+    (general-define-key
+     :states '(normal visual emacs)
+     "K" 'lsp-ui-doc-glance
+     "gd" 'lsp-ui-peek-find-definitions)
 
   (general-define-key
    :states '(normal visual emacs)
@@ -161,6 +165,12 @@
     "tt" '(visual-line-mode :wk "Toggle truncated lines"))
   
   (rp/leader-keys
+    "p" '(:ignore t :wk "Fuzzy find")
+	"pg" '(fzf-grep :wk "Fuzzy grep")
+	"pf" '(fzf-find-file :wk "Fuzzy find file")
+  )
+  
+  (rp/leader-keys
     "w" '(:ignore t :wk "Windows")
     "wc" '(evil-window-delete :wk "Close window")
     "wn" '(evil-window-new :wk "New window")
@@ -177,7 +187,6 @@
     "wJ" '(buf-move-down :wk "Move window down")
     "wL" '(buf-move-right :wk "Move window right")
     "wK" '(buf-move-up :wk "Move window up"))
-  
   )
 
 (require 'windmove)
@@ -394,11 +403,19 @@ one, an error is signaled."
   ;; truncate long file names in neotree
   (add-hook 'neo-after-create-hook
             #'(lambda (_)
-              (with-current-buffer (get-buffer neo-buffer-name)
+  		(with-current-buffer (get-buffer neo-buffer-name)
                   (setq truncate-lines t)
                   (setq word-wrap nil)
                   (make-local-variable 'auto-hscroll-mode)
                   (setq auto-hscroll-mode nil)))))
+(setq neo-smart-open t)
+(evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-quick-look)
+(evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
+(evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter)
+(evil-define-key 'normal neotree-mode-map (kbd "g") 'neotree-refresh)
+(evil-define-key 'normal neotree-mode-map (kbd "A") 'neotree-stretch-toggle)
+(evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
+(evil-define-key 'normal neotree-mode-map (kbd "d") 'neotree-create-node)
 
 (use-package counsel
   :ensure t
@@ -514,6 +531,9 @@ one, an error is signaled."
 
 
 
+(setq make-backup-files nil)     
+(setq auto-save-default nil)
+
 ;; Minimal fix - just ensure directories exist
 (make-directory "~/.emacs.d/auto-save" t)
 (make-directory "~/.emacs.d/backups" t)
@@ -529,3 +549,6 @@ one, an error is signaled."
   :ensure t  
   :config
   (evil-multiedit-default-keybinds))
+
+(use-package fzf
+  :ensure t)

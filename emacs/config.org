@@ -42,13 +42,11 @@
 - [[#sudo-edit][SUDO-EDIT]]
 - [[#pyenv][PYENV]]
 - [[#language-support][LANGUAGE-SUPPORT]]
-<<<<<<< HEAD
 - [[#disable-auto-save][DISABLE AUTO-SAVE]]
-=======
 - [[#changing-directory-of-auto-saves][CHANGING DIRECTORY OF AUTO-SAVES]]
 - [[#enabling-maven][ENABLING MAVEN]]
 - [[#multiple-cursors][MULTIPLE CURSORS]]
->>>>>>> 1928ae2 (huhuhuh)
+- [[#fzf][FZF]]
 
 * RELOAD-EMACS
 #+begin_src emacs-lisp
@@ -152,107 +150,109 @@
 
 ** General Keybindings
 #+begin_src emacs-lisp
-  (defun rp/flycheck-errors ()
-    (interactive)
-    (if (get-buffer-window "*Flycheck errors*")
-        (delete-window (get-buffer-window "*Flycheck errors*"))
-      (flycheck-list-errors))) 
+      (defun rp/flycheck-errors ()
+        (interactive)
+        (if (get-buffer-window "*Flycheck errors*")
+            (delete-window (get-buffer-window "*Flycheck errors*"))
+          (flycheck-list-errors))) 
 
-<<<<<<< HEAD
-  (use-package general
-    :ensure t
-    :config
-    (general-evil-setup)
-=======
-      (general-define-key
-       :states '(normal visual emacs)
-       "K" 'lsp-ui-doc-glance
-       "gd" 'lsp-ui-peek-find-definitions)
->>>>>>> 1928ae2 (huhuhuh)
+      (use-package general
+        :ensure t
+        :config
+        (general-evil-setup)
+          (general-define-key
+           :states '(normal visual emacs)
+           "K" 'lsp-ui-doc-glance
+           "gd" 'lsp-ui-peek-find-definitions)
 
-    (general-define-key
-     :states '(normal visual emacs)
-     "K" 'lsp-ui-doc-glance
-     "gd" 'lsp-ui-peek-find-definitions)
+        (general-define-key
+         :states '(normal visual emacs)
+         "K" 'lsp-ui-doc-glance
+         "gd" 'lsp-ui-peek-find-definitions)
 
-    ;; SET SPC as leader key
-    (general-create-definer rp/leader-keys
-      :states '(normal insert visual emacs)
-      :keymaps 'override
-      :prefix "SPC" ;; set leader
-      :global-prefix "M-SPC") ;; access leader in insert mode
+        ;; SET SPC as leader key
+        (general-create-definer rp/leader-keys
+          :states '(normal insert visual emacs)
+          :keymaps 'override
+          :prefix "SPC" ;; set leader
+          :global-prefix "M-SPC") ;; access leader in insert mode
 
-    (rp/leader-keys
-      "b" '(:ignore t :wk "buffer")
-      "bi" '(ibuffer :wk "ibuffer")
-      "bb" '(switch-to-buffer :wk "Switch buffer")
-      "bk" '(kill-current-buffer :wk "Kill this buffer")
-      "bn" '(next-buffer :wk "Next buffer")
-      "bp" '(previous-buffer :wk "Previous buffer")
-      "br" '(revert-buffer :wk "Reload buffer"))
+        (rp/leader-keys
+          "b" '(:ignore t :wk "buffer")
+          "bi" '(ibuffer :wk "ibuffer")
+          "bb" '(switch-to-buffer :wk "Switch buffer")
+          "bk" '(kill-current-buffer :wk "Kill this buffer")
+          "bn" '(next-buffer :wk "Next buffer")
+          "bp" '(previous-buffer :wk "Previous buffer")
+          "br" '(revert-buffer :wk "Reload buffer"))
 
-    (rp/leader-keys
-      "e" '(:ignore t :wk "Evaluate")
-      "eb" '(eval-buffer :wk "Evaluate elisp in buffer")
-      "ed" '(eval-defun :wk "Evaluate defun containing or after point")
-      "ee" '(eval-expression :wk "Evaluate elisp expression")
-      "el" '(eval-last-sexp :wk "Evaluate elisp expression before point")
-      "er" '(eval-region :wk "Evaluate elisp region"))
+        (rp/leader-keys
+          "e" '(:ignore t :wk "Evaluate")
+          "eb" '(eval-buffer :wk "Evaluate elisp in buffer")
+          "ed" '(eval-defun :wk "Evaluate defun containing or after point")
+          "ee" '(eval-expression :wk "Evaluate elisp expression")
+          "el" '(eval-last-sexp :wk "Evaluate elisp expression before point")
+          "er" '(eval-region :wk "Evaluate elisp region"))
 
-    (rp/leader-keys
-      "." '(find-file :wk "Find file")
-      "fc" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
-      "fr" '(counsel-recentf :wk "Find recent files")
-      "TAB TAB" '(comment-line :wk "Comment lines"))
+        (rp/leader-keys
+          "." '(find-file :wk "Find file")
+          "fc" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
+          "fr" '(counsel-recentf :wk "Find recent files")
+          "TAB TAB" '(comment-line :wk "Comment lines"))
 
-    (rp/leader-keys
-      "h" '(:ignore t :wk "Help")
-      "hf" '(describe-function :wk "Describe function")
-      "hv" '(describe-variable :wk "Describe variable")
-      "hrr" '(reload-init-file :wk "Reload emacs config"))
+        (rp/leader-keys
+          "h" '(:ignore t :wk "Help")
+          "hf" '(describe-function :wk "Describe function")
+          "hv" '(describe-variable :wk "Describe variable")
+          "hrr" '(reload-init-file :wk "Reload emacs config"))
 
-    (rp/leader-keys
-      "d" '(:ignore t :wk "Dired")
-      "dd" '(dired :wk "Open dired")
-      "dj" '(dired-jump :wk "Dired jump to current")
-      "dn" '(neotree-dir :wk "Open directory in neotree")
-      "dp" '(peep-dired :wk "Peep-dired"))
+        (rp/leader-keys
+          "d" '(:ignore t :wk "Dired")
+          "dd" '(dired :wk "Open dired")
+          "dj" '(dired-jump :wk "Dired jump to current")
+          "dn" '(neotree-dir :wk "Open directory in neotree")
+          "dp" '(peep-dired :wk "Peep-dired"))
 
-    (rp/leader-keys
-      "m b" '(:ignore t :wk "Tables")
-      "m b -" '(org-table-insert-hline :wk "Insert hline in table"))
+        (rp/leader-keys
+          "m b" '(:ignore t :wk "Tables")
+          "m b -" '(org-table-insert-hline :wk "Insert hline in table"))
 
-    (rp/leader-keys
-      "p" '(projectile-command-map :wk "Projectile"))
+        (rp/leader-keys
+          "p" '(projectile-command-map :wk "Projectile"))
 
-    (rp/leader-keys
-      "t" '(:ignore t :wk "Toggle")
-      "te" '(eshell-toggle :wk "Toggle eshell")
-      "tf" '(rp/flycheck-errors :wk "List errors")
-      "tv" '(vterm-toggle :wk "Vterm toggle")
-      "tn" '(neotree-toggle :wk "Toggle neotree file viewer")
-      "tl" '(display-line-numbers-mode :wk "Toggle line numbers")
-      "tt" '(visual-line-mode :wk "Toggle truncated lines"))
-    
-    (rp/leader-keys
-      "w" '(:ignore t :wk "Windows")
-      "wc" '(evil-window-delete :wk "Close window")
-      "wn" '(evil-window-new :wk "New window")
-      "ws" '(evil-window-split :wk "Horizontal split window")
-      "wv" '(evil-window-vsplit :wk "Vertical split window")
-      ;; Window motions
-      "wh" '(evil-window-left :wk "Window left")
-      "wj" '(evil-window-down :wk "Window down")
-      "wl" '(evil-window-right :wk "Window right")
-      "wk" '(evil-window-up :wk "Window up")
+        (rp/leader-keys
+          "t" '(:ignore t :wk "Toggle")
+          "te" '(eshell-toggle :wk "Toggle eshell")
+          "tf" '(rp/flycheck-errors :wk "List errors")
+          "tv" '(vterm-toggle :wk "Vterm toggle")
+          "tn" '(neotree-toggle :wk "Toggle neotree file viewer")
+          "tl" '(display-line-numbers-mode :wk "Toggle line numbers")
+          "tt" '(visual-line-mode :wk "Toggle truncated lines"))
+        
+        (rp/leader-keys
+          "p" '(:ignore t :wk "Fuzzy find")
+  	"pg" '(fzf-grep :wk "Fuzzy grep")
+  	"pf" '(fzf-find-file :wk "Fuzzy find file")
+        )
+        
+        (rp/leader-keys
+          "w" '(:ignore t :wk "Windows")
+          "wc" '(evil-window-delete :wk "Close window")
+          "wn" '(evil-window-new :wk "New window")
+          "ws" '(evil-window-split :wk "Horizontal split window")
+          "wv" '(evil-window-vsplit :wk "Vertical split window")
+          ;; Window motions
+          "wh" '(evil-window-left :wk "Window left")
+          "wj" '(evil-window-down :wk "Window down")
+          "wl" '(evil-window-right :wk "Window right")
+          "wk" '(evil-window-up :wk "Window up")
 
-      ;; Move windows
-      "wH" '(buf-move-left :wk "Move window left")
-      "wJ" '(buf-move-down :wk "Move window down")
-      "wL" '(buf-move-right :wk "Move window right")
-      "wK" '(buf-move-up :wk "Move window up"))
-    
-    ) 
+          ;; Move windows
+          "wH" '(buf-move-left :wk "Move window left")
+          "wJ" '(buf-move-down :wk "Move window down")
+          "wL" '(buf-move-right :wk "Move window right")
+          "wK" '(buf-move-up :wk "Move window up"))
+        ) 
 
 #+end_src
 
@@ -534,11 +534,19 @@ Defining various fonts that emacs will use
     ;; truncate long file names in neotree
     (add-hook 'neo-after-create-hook
               #'(lambda (_)
-                (with-current-buffer (get-buffer neo-buffer-name)
+    		(with-current-buffer (get-buffer neo-buffer-name)
                     (setq truncate-lines t)
                     (setq word-wrap nil)
                     (make-local-variable 'auto-hscroll-mode)
                     (setq auto-hscroll-mode nil)))))
+  (setq neo-smart-open t)
+  (evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-quick-look)
+  (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
+  (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter)
+  (evil-define-key 'normal neotree-mode-map (kbd "g") 'neotree-refresh)
+  (evil-define-key 'normal neotree-mode-map (kbd "A") 'neotree-stretch-toggle)
+  (evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
+  (evil-define-key 'normal neotree-mode-map (kbd "d") 'neotree-create-node)
 #+end_src
 
 
@@ -704,15 +712,12 @@ Defining various fonts that emacs will use
 
 * LANGUAGE-SUPPORT
 #+begin_src emacs-lisp
-<<<<<<< HEAD
-#+end_src>
+#+end_src
 
 * DISABLE AUTO-SAVE
  #+begin_src emacs-lisp
    (setq make-backup-files nil)     
    (setq auto-save-default nil)     
-#+end_src>
-=======
 #+end_src
 
 * CHANGING DIRECTORY OF AUTO-SAVES
@@ -738,4 +743,9 @@ Defining various fonts that emacs will use
   :config
   (evil-multiedit-default-keybinds))
 #+end_src
->>>>>>> 1928ae2 (huhuhuh)
+
+* FZF
+#+begin_src emacs-lisp
+(use-package fzf
+  :ensure t)
+#+end_src
